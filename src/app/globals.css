@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-heading: "Playfair Display", serif;
+  --font-body: "DM Sans", sans-serif;
+  --font-accent: "Dancing Script", cursive;
+
+  --color-white: #FFFFFF;
+  --color-coral: #C7603A;
+  --color-coral-light: #E89478;
+  --color-coral-dark: #A34E2E;
+  --color-yellow: #F5C842;
+  --color-yellow-light: #FCE38A;
+  --color-yellow-dark: #D4A830;
+  --color-sage: #8FAF8A;
+  --color-sage-light: #B5CFB0;
+  --color-sage-dark: #6F8F6A;
+  --color-beige: #F5F0EB;
+  --color-cream: #FAF7F2;
+  --color-charcoal: #2C2C2C;
+  --color-warm-gray: #7A7065;
+
+  --color-background: var(--color-white);
+  --color-foreground: var(--color-charcoal);
+}
+
+@utility container-main {
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-charcoal);
+  font-family: var(--font-body), sans-serif;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes float-delayed {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 0.3; }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float-delayed 5s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 3s ease-in-out infinite;
+}
