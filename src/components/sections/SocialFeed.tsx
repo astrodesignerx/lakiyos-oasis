@@ -22,7 +22,7 @@ export function SocialFeed() {
                 href={siteConfig.social.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group block aspect-square rounded-xl overflow-hidden bg-beige"
+                className="group block aspect-square rounded-xl overflow-hidden bg-paper-dark border-2 border-ink shadow-[4px_4px_0_0_var(--color-ink)] transition-all duration-200 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0_0_var(--color-ink)]"
               >
                 <img
                   src={`https://images.unsplash.com/photo-${i === 1 ? '1513364776144-60967b0f800f' : i === 2 ? '1563241527-3004b7be0ffd' : i === 3 ? '1524995997946-a1c2e315a42f' : i === 4 ? '1529156069898-49953e39b3ac' : i === 5 ? '1513542789411-b6a5d4f31634' : '1452860606245-08befc0ff44b'}?w=400&q=80`}

@@ -35,8 +35,8 @@ export function OasisPreview() {
           {physicalProducts.map((product) => (
             <motion.div key={product.id} variants={staggerItem}>
               <Link href={`/oasis-at-home#${product.slug}`} className="group block">
-                <div className="bg-cream rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
-                  <div className="relative h-64 overflow-hidden">
+                <div className="bg-white border-2 border-ink rounded-2xl overflow-hidden shadow-[5px_5px_0_0_var(--color-ink)] transition-all duration-200 group-hover:translate-x-[2px] group-hover:translate-y-[2px] group-hover:shadow-[3px_3px_0_0_var(--color-ink)]">
+                  <div className="relative h-64 overflow-hidden border-b-2 border-ink">
                     <img
                       src={product.image}
                       alt={product.name}

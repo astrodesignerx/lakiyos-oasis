@@ -10,7 +10,7 @@ export function SubscriptionPreview() {
   return (
     <section className="py-20 md:py-28 bg-gradient-to-br from-yellow/5 via-white to-sage/5">
       <div className="container-main">
-        <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-lg overflow-hidden border border-beige">
+        <div className="max-w-4xl mx-auto bg-white rounded-3xl border-2 border-ink shadow-[8px_8px_0_0_var(--color-ink)] overflow-hidden">
           <div className="grid md:grid-cols-2">
             <div className="relative h-64 md:h-full min-h-[300px]">
               <img
@@ -32,7 +32,7 @@ export function SubscriptionPreview() {
                 <ul className="space-y-2 mb-6">
                   {['Themed coloring book', 'Premium art supplies', 'Creative prompt cards', 'Exclusive digital session access'].map((item) => (
                     <li key={item} className="flex items-start gap-2 text-sm text-charcoal/70">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C7603A" strokeWidth="2" className="shrink-0 mt-0.5">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-pink)" strokeWidth="2.5" className="shrink-0 mt-0.5">
                         <polyline points="20 6 9 17 4 12"/>
                       </svg>
                       {item}
@@ -44,7 +44,7 @@ export function SubscriptionPreview() {
                     href={`https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent('Hi! I am interested in the YOASIS Monthly Kit. Keep me updated!')}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-white bg-coral rounded-xl hover:bg-coral-dark transition-all duration-300 min-h-[44px]"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-heading font-bold text-white bg-pink border-2 border-ink rounded-2xl shadow-[4px_4px_0_0_var(--color-ink)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0_0_var(--color-ink)] transition-all duration-150 min-h-[44px]"
                   >
                     Join the Waitlist
                   </a>

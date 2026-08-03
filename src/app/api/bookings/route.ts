@@ -3,6 +3,7 @@ import { db } from '@/db'
 import { bookings, events } from '@/db/schema'
 import { eq } from 'drizzle-orm'
 import { initializeTransaction, generateReference } from '@/lib/paystack'
+import { checkAdmin } from '@/lib/admin'
 
 export async function POST(req: Request) {
   try {
@@ -57,6 +58,11 @@ export async function POST(req: Request) {
 }
 
 export async function GET() {
+  const denied = await checkAdmin()
+  if (denied) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   try {
     const allBookings = await db.query.bookings.findMany({
       with: {

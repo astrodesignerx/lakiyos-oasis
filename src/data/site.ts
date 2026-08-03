@@ -8,7 +8,7 @@ export const siteConfig = {
   description:
     'A creative sanctuary where people reconnect with themselves and others through immersive experiences, emotional expression, and accessible creativity.',
   email: 'lakiyooasis@gmail.com',
-  whatsapp: '+254700000000',
+  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '+254700000000',
   whatsappMessage: 'Hi! I would like to know more about your experiences at Lakiyo\'s Oasis.',
   location: 'Nairobi, Kenya',
   responseTime: 'We typically respond within 24 hours',

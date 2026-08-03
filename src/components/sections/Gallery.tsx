@@ -30,13 +30,13 @@ export function Gallery() {
           {galleryImages.map((img) => (
             <motion.div
               key={img.id}
-              className="break-inside-avoid overflow-hidden rounded-xl group relative cursor-pointer"
+              className="break-inside-avoid overflow-hidden rounded-xl group relative cursor-pointer border-2 border-ink shadow-[4px_4px_0_0_var(--color-ink)]"
               variants={staggerItem}
             >
               <img
                 src={img.src}
                 alt={img.alt}
-                className="w-full h-auto rounded-xl transition-transform duration-500 group-hover:scale-105"
+                className="w-full h-auto transition-transform duration-500 group-hover:scale-105"
                 loading="lazy"
               />
               <div className="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/20 transition-all duration-300 rounded-xl" />

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { db } from '@/db'
 import { contactSubmissions } from '@/db/schema'
+import { checkAdmin } from '@/lib/admin'
 
 export async function POST(req: Request) {
   try {
@@ -28,6 +29,11 @@ export async function POST(req: Request) {
 }
 
 export async function GET() {
+  const denied = await checkAdmin()
+  if (denied) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   try {
     const submissions = await db.query.contactSubmissions.findMany({
       orderBy: (contactSubmissions, { desc }) => [desc(contactSubmissions.createdAt)],

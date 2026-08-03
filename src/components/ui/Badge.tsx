@@ -8,17 +8,17 @@ interface BadgeProps {
 }
 
 const badgeVariants = {
-  coral: 'bg-coral/15 text-coral border-coral/20',
-  yellow: 'bg-yellow/20 text-yellow-dark border-yellow/30',
-  sage: 'bg-sage/20 text-sage-dark border-sage/30',
-  charcoal: 'bg-charcoal/10 text-warm-gray border-charcoal/10',
+  coral: 'bg-pink text-white',
+  yellow: 'bg-sunshine text-ink',
+  sage: 'bg-green text-white',
+  charcoal: 'bg-ink text-paper',
 }
 
 export function Badge({ children, variant = 'coral', className }: BadgeProps) {
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium',
+        'inline-flex items-center gap-1.5 rounded-full border-2 border-ink px-3 py-1 text-xs font-bold uppercase tracking-wide shadow-[2px_2px_0_0_var(--color-ink)]',
         badgeVariants[variant],
         className
       )}

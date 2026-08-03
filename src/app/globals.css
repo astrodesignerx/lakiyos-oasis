@@ -1,27 +1,51 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-heading: "Playfair Display", serif;
-  --font-body: "DM Sans", sans-serif;
-  --font-accent: "Dancing Script", cursive;
+  --font-heading: var(--font-bricolage), "Bricolage Grotesque", sans-serif;
+  --font-body: var(--font-dm-sans), "DM Sans", sans-serif;
+  --font-accent: var(--font-caveat), "Caveat", cursive;
 
+  /* — Bold & playful palette — */
   --color-white: #FFFFFF;
-  --color-coral: #C7603A;
-  --color-coral-light: #E89478;
-  --color-coral-dark: #A34E2E;
-  --color-yellow: #F5C842;
-  --color-yellow-light: #FCE38A;
-  --color-yellow-dark: #D4A830;
-  --color-sage: #8FAF8A;
-  --color-sage-light: #B5CFB0;
-  --color-sage-dark: #6F8F6A;
-  --color-beige: #F5F0EB;
-  --color-cream: #FAF7F2;
-  --color-charcoal: #2C2C2C;
-  --color-warm-gray: #7A7065;
+  --color-paper: #FFF8EE;
+  --color-paper-dark: #F7ECDC;
+  --color-ink: #201A23;
 
-  --color-background: var(--color-white);
-  --color-foreground: var(--color-charcoal);
+  --color-pink: #FF4D8D;
+  --color-pink-light: #FFA3C4;
+  --color-pink-dark: #D82E6E;
+
+  --color-sunshine: #FFC633;
+  --color-sunshine-light: #FFE18A;
+  --color-sunshine-dark: #C78F00;
+
+  --color-green: #00B884;
+  --color-green-light: #7FE0C3;
+  --color-green-dark: #00795C;
+
+  --color-blue: #4A6CFA;
+  --color-blue-light: #A9BAFF;
+  --color-blue-dark: #2E4CD7;
+
+  --color-orange: #FF7A2F;
+
+  /* — Legacy aliases so existing pages inherit the new palette — */
+  --color-coral: var(--color-pink);
+  --color-coral-light: var(--color-pink-light);
+  --color-coral-dark: var(--color-pink-dark);
+  --color-yellow: var(--color-sunshine);
+  --color-yellow-light: var(--color-sunshine-light);
+  --color-yellow-dark: var(--color-sunshine-dark);
+  --color-sage: var(--color-green);
+  --color-sage-light: var(--color-green-light);
+  --color-sage-dark: var(--color-green-dark);
+  --color-beige: var(--color-paper-dark);
+  --color-cream: var(--color-paper);
+  --color-charcoal: var(--color-ink);
+  --color-warm-gray: #6B6470;
+
+  --color-background: var(--color-paper);
+  --color-foreground: var(--color-ink);
 }
 
 @utility container-main {
@@ -32,10 +56,35 @@
   padding-right: 1.5rem;
 }
 
+/* Sticker card: chunky ink border + hard offset shadow */
+@utility sticker {
+  border: 2px solid var(--color-ink);
+  box-shadow: 5px 5px 0 0 var(--color-ink);
+}
+
+@utility sticker-sm {
+  border: 2px solid var(--color-ink);
+  box-shadow: 3px 3px 0 0 var(--color-ink);
+}
+
 body {
-  background: var(--color-cream);
-  color: var(--color-charcoal);
-  font-family: var(--font-body), sans-serif;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-dm-sans), "DM Sans", sans-serif;
+}
+
+::selection {
+  background: var(--color-sunshine);
+  color: var(--color-ink);
+}
+
+/* Hand-drawn squiggle underline for highlighted words */
+.squiggle {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='10' viewBox='0 0 80 10'%3E%3Cpath d='M2 7 Q 10 2, 20 6 T 40 6 T 60 6 T 78 5' fill='none' stroke='%23FF4D8D' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: bottom center;
+  background-size: 100% 0.35em;
+  padding-bottom: 0.25em;
 }
 
 @keyframes float {
@@ -53,6 +102,16 @@ body {
   50% { opacity: 0.3; }
 }
 
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes wobble {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+}
+
 .animate-float {
   animation: float 4s ease-in-out infinite;
 }
@@ -64,4 +123,22 @@ body {
 
 .animate-pulse-soft {
   animation: pulse-soft 3s ease-in-out infinite;
+}
+
+.animate-marquee {
+  animation: marquee 24s linear infinite;
+}
+
+.animate-wobble {
+  animation: wobble 3s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float,
+  .animate-float-delayed,
+  .animate-pulse-soft,
+  .animate-marquee,
+  .animate-wobble {
+    animation: none;
+  }
 }

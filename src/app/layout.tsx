@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Playfair_Display, DM_Sans, Dancing_Script } from 'next/font/google'
+import { Bricolage_Grotesque, DM_Sans, Caveat } from 'next/font/google'
 import './globals.css'
 import { Header } from '@/components/shared/Header'
 import { Footer } from '@/components/shared/Footer'
@@ -7,25 +7,26 @@ import { WhatsAppFloat } from '@/components/shared/WhatsAppFloat'
 import { localBusinessSchema } from '@/lib/schema'
 import { ClientClerkProvider } from '@/components/shared/ClientClerkProvider'
 
-const playfair = Playfair_Display({
+const bricolage = Bricolage_Grotesque({
   subsets: ['latin'],
-  variable: '--font-heading',
+  variable: '--font-bricolage',
   display: 'swap',
 })
 
 const dmSans = DM_Sans({
   subsets: ['latin'],
-  variable: '--font-body',
+  variable: '--font-dm-sans',
   display: 'swap',
 })
 
-const dancingScript = Dancing_Script({
+const caveat = Caveat({
   subsets: ['latin'],
-  variable: '--font-accent',
+  variable: '--font-caveat',
   display: 'swap',
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3003'),
   title: {
     default: 'Creative Experiences in Nairobi | Lakiyo\'s Oasis (YOASIS)',
     template: '%s | Lakiyo\'s Oasis (YOASIS)',
@@ -46,7 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${playfair.variable} ${dmSans.variable} ${dancingScript.variable}`}
+      className={`${bricolage.variable} ${dmSans.variable} ${caveat.variable}`}
     >
       <body className="min-h-screen flex flex-col antialiased">
         <script
