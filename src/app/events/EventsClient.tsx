@@ -6,7 +6,7 @@ import { ScrollReveal } from '@/components/shared/ScrollReveal'
 import { Button } from '@/components/ui/Button'
 import { Badge, AvailabilityBadge } from '@/components/ui/Badge'
 import { experiences, siteConfig } from '@/data/site'
-import { formatDate, formatPrice } from '@/lib/utils'
+import { formatDate, formatPrice, isUpcomingEvent, experienceTypeLabels } from '@/lib/utils'
 import type { ExperienceType } from '@/types'
 
 export function EventsClient() {
@@ -58,12 +58,16 @@ export function EventsClient() {
     { label: 'Sip & Paint', value: 'sip-and-paint' as const },
     { label: 'Flower Workshops', value: 'flower-workshop' as const },
     { label: 'Book Club', value: 'book-club' as const },
-    { label: 'Corporate', value: 'corporate' as const },
   ]
 
+  const upcomingExperiences = useMemo(
+    () => experiences.filter((e) => isUpcomingEvent(e.date)),
+    []
+  )
+
   const filteredExperiences = useMemo(
-    () => (activeFilter === 'all' ? experiences : experiences.filter((e) => e.type === activeFilter)),
-    [activeFilter]
+    () => (activeFilter === 'all' ? upcomingExperiences : upcomingExperiences.filter((e) => e.type === activeFilter)),
+    [activeFilter, upcomingExperiences]
   )
 
   const handleBook = (id: string) => {
@@ -159,7 +163,11 @@ export function EventsClient() {
 
             {filteredExperiences.length === 0 ? (
               <div className="text-center py-20">
-                <p className="text-warm-gray mb-4">No events are currently listed for this category.</p>
+                <p className="text-warm-gray mb-4">
+                  {activeFilter === 'all'
+                    ? 'No upcoming events are listed right now.'
+                    : 'No events are currently listed for this category.'}
+                </p>
                 <p className="text-sm text-warm-gray/70 mb-6">
                   New sessions are added regularly. Join the WhatsApp broadcast list to get first access.
                 </p>
@@ -184,7 +192,7 @@ export function EventsClient() {
                       <div className="p-6">
                         <div className="flex items-start justify-between gap-3 mb-3">
                           <Badge variant={event.type === 'sip-and-paint' ? 'coral' : event.type === 'flower-workshop' ? 'yellow' : 'sage'}>
-                            {event.type.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
+                            {experienceTypeLabels[event.type] || event.name}
                           </Badge>
                           <AvailabilityBadge status={event.status} />
                         </div>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ScrollReveal } from '@/components/shared/ScrollReveal'
 import { Button } from '@/components/ui/Button'
@@ -14,22 +14,24 @@ import type { Product } from '@/types'
 
 export function OasisAtHomeClient() {
   const [cartOpen, setCartOpen] = useState(false)
-  const [cart, setCart] = useState<Product[]>([])
+  const [cart, setCart] = useState<{ key: number; product: Product }[]>([])
+  const cartKeyRef = useRef(0)
   const [checkoutStep, setCheckoutStep] = useState(0)
   const [submitting, setSubmitting] = useState(false)
   const [deliveryZone, setDeliveryZone] = useState('')
   const [orderForm, setOrderForm] = useState({ name: '', email: '', phone: '', address: '' })
 
   const addToCart = (product: Product) => {
-    setCart([...cart, product])
+    cartKeyRef.current += 1
+    setCart([...cart, { key: cartKeyRef.current, product }])
     setCartOpen(true)
   }
 
-  const removeFromCart = (id: string) => {
-    setCart(cart.filter((item) => item.id !== id))
+  const removeFromCart = (key: number) => {
+    setCart(cart.filter((item) => item.key !== key))
   }
 
-  const total = cart.reduce((sum, item) => sum + item.price, 0)
+  const total = cart.reduce((sum, item) => sum + item.product.price, 0)
 
   return (
     <>
@@ -59,7 +61,7 @@ export function OasisAtHomeClient() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto mb-16">
             {products.filter(p => p.type === 'physical').map((product, index) => (
               <ScrollReveal key={product.id} delay={index * 0.1}>
-                <div className="bg-cream rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
+                <div id={product.id} className="bg-cream rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 scroll-mt-28">
                   <div className="relative h-64 overflow-hidden">
                     <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
                   </div>
@@ -192,15 +194,15 @@ export function OasisAtHomeClient() {
                   <>
                     <div className="flex-1 space-y-4 overflow-y-auto">
                       {cart.map((item) => (
-                        <div key={item.id + Math.random()} className="flex items-center gap-4 bg-beige rounded-xl p-4">
+                        <div key={item.key} className="flex items-center gap-4 bg-beige rounded-xl p-4">
                           <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0">
-                            <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                            <img src={item.product.image} alt={item.product.name} className="w-full h-full object-cover" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-semibold text-charcoal truncate">{item.name}</p>
-                            <p className="text-sm font-medium text-coral">{formatPrice(item.price)}</p>
+                            <p className="text-sm font-semibold text-charcoal truncate">{item.product.name}</p>
+                            <p className="text-sm font-medium text-coral">{formatPrice(item.product.price)}</p>
                           </div>
-                          <button onClick={() => removeFromCart(item.id)} className="text-warm-gray hover:text-coral transition-colors">
+                          <button onClick={() => removeFromCart(item.key)} className="text-warm-gray hover:text-coral transition-colors">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                               <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
                             </svg>
@@ -210,7 +212,7 @@ export function OasisAtHomeClient() {
                     </div>
 
                     <div className="border-t border-beige pt-4 mt-4 space-y-4">
-                      {cart.some(p => p.type === 'physical') && (
+                      {cart.some((entry) => entry.product.type === 'physical') && (
                         <div>
                           <p className="text-xs font-medium text-charcoal/50 uppercase tracking-wider mb-2">Delivery Zone</p>
                           <select
@@ -263,10 +265,10 @@ export function OasisAtHomeClient() {
               <h3 className="font-heading text-xl text-charcoal font-bold mb-4">Complete Your Order</h3>
               <div className="space-y-4 mb-6">
                 <div className="bg-beige rounded-xl p-4 text-sm space-y-1">
-                  {cart.map((item, i) => (
-                    <p key={i} className="flex justify-between">
-                      <span>{item.name}</span>
-                      <span className="font-medium">{formatPrice(item.price)}</span>
+                  {cart.map((item) => (
+                    <p key={item.key} className="flex justify-between">
+                      <span>{item.product.name}</span>
+                      <span className="font-medium">{formatPrice(item.product.price)}</span>
                     </p>
                   ))}
                   <div className="border-t border-beige/50 pt-2 mt-2 flex justify-between font-semibold">
@@ -286,7 +288,7 @@ export function OasisAtHomeClient() {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                      items: cart.map(i => ({ name: i.name, price: i.price })),
+                      items: cart.map((i) => ({ name: i.product.name, price: i.product.price })),
                       total,
                       customerName: orderForm.name,
                       customerEmail: orderForm.email,

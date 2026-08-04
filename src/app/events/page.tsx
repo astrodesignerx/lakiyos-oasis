@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { EventsClient } from './EventsClient'
 import { experiences } from '@/data/site'
 import { eventSchema } from '@/lib/schema'
+import { isUpcomingEvent } from '@/lib/utils'
 
 export const metadata: Metadata = {
   title: 'Upcoming Events | Book a Creative Session in Nairobi — Lakiyo\'s Oasis',
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
 }
 
 export default function EventsPage() {
-  const schemas = experiences.map((e) =>
+  const schemas = experiences.filter((e) => isUpcomingEvent(e.date)).map((e) =>
     eventSchema({
       name: e.name,
       date: e.date,

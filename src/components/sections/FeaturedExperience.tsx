@@ -5,10 +5,41 @@ import { ScrollReveal } from '@/components/shared/ScrollReveal'
 import { Button } from '@/components/ui/Button'
 import { Badge, AvailabilityBadge } from '@/components/ui/Badge'
 import { experiences, siteConfig } from '@/data/site'
-import { formatDate, formatPrice } from '@/lib/utils'
+import { formatDate, formatPrice, isUpcomingEvent } from '@/lib/utils'
 
 export function FeaturedExperience() {
-  const event = experiences[0]
+  const event = experiences.find((e) => isUpcomingEvent(e.date))
+
+  if (!event) {
+    return (
+      <section className="py-20 md:py-28 bg-paper">
+        <div className="container-main">
+          <ScrollReveal className="text-center mb-12">
+            <Badge variant="coral" className="-rotate-2">Next Up</Badge>
+            <h2 className="font-heading text-4xl md:text-5xl text-ink font-extrabold tracking-tight mt-5">
+              New dates brewing
+            </h2>
+          </ScrollReveal>
+          <ScrollReveal delay={0.15}>
+            <div className="max-w-2xl mx-auto bg-white border-2 border-ink rounded-3xl shadow-[8px_8px_0_0_var(--color-ink)] p-10 md:p-14 text-center">
+              <p className="text-warm-gray mb-2">We&apos;re locking in the next round of sessions right now.</p>
+              <p className="text-warm-gray mb-8">
+                Join the broadcast list to be the first to know when tickets open.
+              </p>
+              <a
+                href={`https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent('Hi! I would like to join the YOASIS broadcast list.')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-heading font-bold text-ink bg-sunshine border-2 border-ink rounded-2xl shadow-[4px_4px_0_0_var(--color-ink)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0_0_var(--color-ink)] transition-all duration-150 min-h-[44px]"
+              >
+                Join the Broadcast List
+              </a>
+            </div>
+          </ScrollReveal>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section className="py-20 md:py-28 bg-paper">

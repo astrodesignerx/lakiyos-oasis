@@ -21,3 +21,15 @@ export function formatDate(date: string) {
     year: 'numeric',
   })
 }
+
+export function isUpcomingEvent(date: string) {
+  const today = new Date().toISOString().slice(0, 10)
+  return date >= today
+}
+
+export const experienceTypeLabels: Record<string, string> = {
+  'sip-and-paint': 'Sip & Paint',
+  'flower-workshop': 'Flower Workshop',
+  'book-club': 'Book Club',
+  corporate: 'Corporate',
+}

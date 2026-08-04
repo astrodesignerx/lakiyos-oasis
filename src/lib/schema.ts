@@ -1,5 +1,18 @@
 import { siteConfig } from '@/data/site'
 
+function toISODateTime(date: string, time: string) {
+  const match = time.trim().match(/^(\d{1,2}):(\d{2})\s*([AaPp][Mm])$/)
+  if (!match) return `${date}T00:00:00`
+  let hours = Number(match[1])
+  const minutes = Number(match[2])
+  const modifier = match[3].toUpperCase()
+  if (modifier === 'PM' && hours < 12) hours += 12
+  if (modifier === 'AM' && hours === 12) hours = 0
+  const hh = String(hours).padStart(2, '0')
+  const mm = String(minutes).padStart(2, '0')
+  return `${date}T${hh}:${mm}:00`
+}
+
 export function localBusinessSchema() {
   return {
     '@context': 'https://schema.org',
@@ -48,7 +61,7 @@ export function eventSchema(event: {
     '@type': 'Event',
     name: event.name,
     description: event.description,
-    startDate: `${event.date}T${event.time}`,
+    startDate: toISODateTime(event.date, event.time),
     location: {
       '@type': 'Place',
       name: event.venue,
