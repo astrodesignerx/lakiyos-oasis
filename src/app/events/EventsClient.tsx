@@ -5,11 +5,11 @@ import { motion } from 'framer-motion'
 import { ScrollReveal } from '@/components/shared/ScrollReveal'
 import { Button } from '@/components/ui/Button'
 import { Badge, AvailabilityBadge } from '@/components/ui/Badge'
-import { experiences, siteConfig } from '@/data/site'
+import { siteConfig } from '@/data/site'
 import { formatDate, formatPrice, isUpcomingEvent, experienceTypeLabels } from '@/lib/utils'
-import type { ExperienceType } from '@/types'
+import type { Event, ExperienceType } from '@/types'
 
-export function EventsClient() {
+export function EventsClient({ events }: { events: Event[] }) {
   const [activeFilter, setActiveFilter] = useState<ExperienceType | 'all'>('all')
   const [bookingEvent, setBookingEvent] = useState<string | null>(null)
   const [showWaitlist, setShowWaitlist] = useState<string | null>(null)
@@ -61,8 +61,8 @@ export function EventsClient() {
   ]
 
   const upcomingExperiences = useMemo(
-    () => experiences.filter((e) => isUpcomingEvent(e.date)),
-    []
+    () => events.filter((e) => isUpcomingEvent(e.date)),
+    [events]
   )
 
   const filteredExperiences = useMemo(
@@ -76,6 +76,18 @@ export function EventsClient() {
     setFormData({ name: '', email: '', whatsapp: '' })
     setPaymentStatus('idle')
   }
+
+  // ?book=<id> opens the booking flow straight away, so the hero can link to a
+  // specific event. Read after mount rather than via useSearchParams, which would
+  // force a Suspense boundary here and drop the event list out of server rendering.
+  // Reading the URL once on mount is exactly the external-system sync effects are for.
+  useEffect(() => {
+    const id = new URLSearchParams(window.location.search).get('book')
+    if (!id) return
+    if (!upcomingExperiences.some((e) => e.id === id)) return
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    handleBook(id)
+  }, [upcomingExperiences])
 
   const handleSubmitBooking = async () => {
     setSubmitting(true)
@@ -129,7 +141,7 @@ export function EventsClient() {
     }
   }
 
-  const currentEvent = experiences.find((e) => e.id === bookingEvent)
+  const currentEvent = events.find((e) => e.id === bookingEvent)
 
   return (
     <section className="pt-28 pb-20 min-h-screen bg-cream">

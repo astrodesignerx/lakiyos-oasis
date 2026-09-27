@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-heading: var(--font-bricolage), "Bricolage Grotesque", sans-serif;
+  --font-heading: var(--font-young-serif), "Young Serif", Georgia, serif;
   --font-body: var(--font-dm-sans), "DM Sans", sans-serif;
   --font-accent: var(--font-caveat), "Caveat", cursive;
 
@@ -11,9 +11,14 @@
   --color-paper-dark: #F7ECDC;
   --color-ink: #201A23;
 
-  --color-pink: #FF4D8D;
-  --color-pink-light: #FFA3C4;
-  --color-pink-dark: #D82E6E;
+  --color-lilac: #B57EDC;
+  --color-lilac-light: #DCC3F2;
+  --color-lilac-dark: #8B4FC4;
+
+  /* The pink names stay live so every existing bg-pink / text-pink picks up lilac. */
+  --color-pink: var(--color-lilac);
+  --color-pink-light: var(--color-lilac-light);
+  --color-pink-dark: var(--color-lilac-dark);
 
   --color-sunshine: #FFC633;
   --color-sunshine-light: #FFE18A;
@@ -71,6 +76,10 @@ body {
   background: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-dm-sans), "DM Sans", sans-serif;
+  /* Young Serif has only one weight, so font-bold on a heading would otherwise be
+     faked by the browser and come out smeared. DM Sans and Caveat carry real
+     weights, so this costs them nothing. */
+  font-synthesis-weight: none;
 }
 
 ::selection {
@@ -78,9 +87,11 @@ body {
   color: var(--color-ink);
 }
 
-/* Hand-drawn squiggle underline for highlighted words */
+/* Hand-drawn squiggle underline for highlighted words.
+   The stroke colour is baked into the SVG — a var() can't reach inside a data URI,
+   so keep %23B57EDC in sync with --color-lilac by hand. */
 .squiggle {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='10' viewBox='0 0 80 10'%3E%3Cpath d='M2 7 Q 10 2, 20 6 T 40 6 T 60 6 T 78 5' fill='none' stroke='%23FF4D8D' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='10' viewBox='0 0 80 10'%3E%3Cpath d='M2 7 Q 10 2, 20 6 T 40 6 T 60 6 T 78 5' fill='none' stroke='%23B57EDC' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: bottom center;
   background-size: 100% 0.35em;
@@ -102,11 +113,6 @@ body {
   50% { opacity: 0.3; }
 }
 
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-
 @keyframes wobble {
   0%, 100% { transform: rotate(-2deg); }
   50% { transform: rotate(2deg); }
@@ -125,10 +131,6 @@ body {
   animation: pulse-soft 3s ease-in-out infinite;
 }
 
-.animate-marquee {
-  animation: marquee 24s linear infinite;
-}
-
 .animate-wobble {
   animation: wobble 3s ease-in-out infinite;
 }
@@ -137,7 +139,6 @@ body {
   .animate-float,
   .animate-float-delayed,
   .animate-pulse-soft,
-  .animate-marquee,
   .animate-wobble {
     animation: none;
   }

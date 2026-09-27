@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { EventsClient } from './EventsClient'
-import { experiences } from '@/data/site'
+import { getEvents } from '@/lib/events'
 import { eventSchema } from '@/lib/schema'
 import { isUpcomingEvent } from '@/lib/utils'
 
@@ -13,8 +13,9 @@ export const metadata: Metadata = {
   },
 }
 
-export default function EventsPage() {
-  const schemas = experiences.filter((e) => isUpcomingEvent(e.date)).map((e) =>
+export default async function EventsPage() {
+  const events = await getEvents()
+  const schemas = events.filter((e) => isUpcomingEvent(e.date)).map((e) =>
     eventSchema({
       name: e.name,
       date: e.date,
@@ -32,7 +33,7 @@ export default function EventsPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schemas) }}
       />
-      <EventsClient />
+      <EventsClient events={events} />
     </>
   )
 }

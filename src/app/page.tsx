@@ -8,13 +8,19 @@ import { Testimonials } from '@/components/sections/Testimonials'
 import { SocialFeed } from '@/components/sections/SocialFeed'
 import { SubscriptionPreview } from '@/components/sections/SubscriptionPreview'
 import { FinalCTA } from '@/components/sections/FinalCTA'
+import { getEvents } from '@/lib/events'
+import { getNextEvent } from '@/lib/utils'
 
-export default function Home() {
+export default async function Home() {
+  // Read once on the server so every section agrees on what "next" means.
+  const events = await getEvents()
+  const nextEvent = getNextEvent(events)
+
   return (
     <>
-      <Hero />
+      <Hero nextEvent={nextEvent} events={events.slice(0, 3)} />
       <BrandStory />
-      <FeaturedExperience />
+      <FeaturedExperience event={nextEvent} />
       <ExperienceCategories />
       <Gallery />
       <OasisPreview />

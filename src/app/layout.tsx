@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Bricolage_Grotesque, DM_Sans, Caveat } from 'next/font/google'
+import { Young_Serif, DM_Sans, Caveat } from 'next/font/google'
 import './globals.css'
 import { Header } from '@/components/shared/Header'
 import { Footer } from '@/components/shared/Footer'
@@ -7,9 +7,12 @@ import { WhatsAppFloat } from '@/components/shared/WhatsAppFloat'
 import { localBusinessSchema } from '@/lib/schema'
 import { ClientClerkProvider } from '@/components/shared/ClientClerkProvider'
 
-const bricolage = Bricolage_Grotesque({
+// Young Serif ships a single weight. Bold headings are handled by disabling
+// synthetic bolding in globals.css rather than by faking a heavier face.
+const youngSerif = Young_Serif({
   subsets: ['latin'],
-  variable: '--font-bricolage',
+  weight: '400',
+  variable: '--font-young-serif',
   display: 'swap',
 })
 
@@ -47,7 +50,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${bricolage.variable} ${dmSans.variable} ${caveat.variable}`}
+      className={`${youngSerif.variable} ${dmSans.variable} ${caveat.variable}`}
     >
       <body className="min-h-screen flex flex-col antialiased">
         <script

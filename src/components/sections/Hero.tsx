@@ -2,42 +2,28 @@
 
 import { motion } from 'framer-motion'
 import Image from 'next/image'
+import Link from 'next/link'
 import { Button } from '@/components/ui/Button'
+import { AvailabilityBadge } from '@/components/ui/Badge'
+import { experienceTypeLabels, formatDateShort } from '@/lib/utils'
+import type { Event } from '@/types'
 
-const tickerItems = [
-  'Sip & Paint',
-  'Flower Workshops',
-  'Book Club',
-  'Corporate Experiences',
-  'Oasis at Home',
-  'Nairobi, Kenya',
+// Only the styling lives here — images and names come from the events themselves,
+// so swapping in genuine event photos updates the hero too.
+const polaroidStyles = [
+  { rotate: '-rotate-6', accent: 'bg-sunshine' },
+  { rotate: 'rotate-3', accent: 'bg-pink' },
+  { rotate: '-rotate-2', accent: 'bg-green' },
 ]
 
-const polaroids = [
-  {
-    src: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=800&q=80',
-    alt: 'Guests painting at a YOASIS sip and paint event',
-    caption: 'paint night!',
-    rotate: '-rotate-6',
-    accent: 'bg-sunshine',
-  },
-  {
-    src: 'https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=800&q=80',
-    alt: 'Flower arrangement workshop in Nairobi',
-    caption: 'fresh blooms',
-    rotate: 'rotate-3',
-    accent: 'bg-pink',
-  },
-  {
-    src: 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=800&q=80',
-    alt: 'Book club gathering at YOASIS',
-    caption: 'book club',
-    rotate: '-rotate-2',
-    accent: 'bg-green',
-  },
-]
+export function Hero({ nextEvent, events }: { nextEvent: Event | null; events: Event[] }) {
+  const polaroids = events.slice(0, polaroidStyles.length).map((event, i) => ({
+    src: event.image,
+    alt: `${event.name} at Lakiyo's Oasis`,
+    caption: experienceTypeLabels[event.type] ?? event.name,
+    ...polaroidStyles[i],
+  }))
 
-export function Hero() {
   return (
     <section className="relative bg-paper overflow-hidden">
       {/* Background doodles */}
@@ -54,7 +40,8 @@ export function Hero() {
       </div>
 
       <div className="container-main relative z-10">
-        <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-12 items-center pt-32 pb-16 md:pt-40 md:pb-24 min-h-[92vh]">
+        {/* 80vh leaves a sliver of the next section showing, which reads as "keep scrolling". */}
+        <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-12 items-center pt-32 pb-16 md:pt-40 md:pb-24 min-h-[80vh]">
           {/* Copy */}
           <div>
             <motion.div
@@ -63,8 +50,9 @@ export function Hero() {
               transition={{ duration: 0.5, ease: 'easeOut' }}
               className="inline-block"
             >
-              <span className="inline-block font-accent text-xl md:text-2xl font-bold bg-sunshine text-ink border-2 border-ink rounded-full px-5 py-1 shadow-[3px_3px_0_0_var(--color-ink)]">
-                Nairobi&apos;s creative playground
+              {/* Literal before lyrical: the headline carries the feeling, this says what we sell. */}
+              <span className="inline-block font-accent text-lg md:text-xl font-bold bg-sunshine text-ink border-2 border-ink rounded-2xl px-5 py-1.5 leading-snug shadow-[3px_3px_0_0_var(--color-ink)]">
+                Sip &amp; paint · Flower workshops · Book clubs — Nairobi
               </span>
             </motion.div>
 
@@ -78,12 +66,7 @@ export function Hero() {
               <br />
               Make <span className="text-pink">friends</span>.
               <br />
-              Feel <span className="relative inline-block">
-                again
-                <svg className="absolute -right-8 -top-4 w-8 h-8 hidden sm:block" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-                  <path d="M16 2 L19 12 L29 12 L21 18 L24 29 L16 22 L8 29 L11 18 L3 12 L13 12 Z" fill="var(--color-pink)" stroke="var(--color-ink)" strokeWidth="2" strokeLinejoin="round" />
-                </svg>
-              </span>.
+              Feel again.
             </motion.h1>
 
             <motion.p
@@ -109,6 +92,45 @@ export function Hero() {
                 Shop the Oasis
               </Button>
             </motion.div>
+
+            <motion.div
+              className="mt-8"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.45, ease: 'easeOut' }}
+            >
+              {nextEvent ? (
+                <div className="inline-flex flex-wrap items-center gap-x-4 gap-y-2 bg-white border-2 border-ink rounded-2xl px-4 py-3 shadow-[4px_4px_0_0_var(--color-ink)]">
+                  <span className="text-[0.625rem] font-bold uppercase tracking-[0.14em] text-warm-gray">
+                    Next up
+                  </span>
+                  <span className="font-heading text-lg text-ink">{nextEvent.name}</span>
+                  <span className="text-sm text-warm-gray">
+                    {formatDateShort(nextEvent.date)} · {nextEvent.time.split(' - ')[0]} · {nextEvent.venue}
+                  </span>
+                  <AvailabilityBadge status={nextEvent.status} />
+                  <Link
+                    href={`/events?book=${nextEvent.id}`}
+                    className="text-sm font-bold text-pink-dark underline underline-offset-4 decoration-2 hover:text-pink transition-colors duration-150"
+                  >
+                    Book this →
+                  </Link>
+                </div>
+              ) : (
+                <div className="inline-flex flex-wrap items-center gap-x-3 gap-y-2 bg-white border-2 border-ink rounded-2xl px-4 py-3 shadow-[4px_4px_0_0_var(--color-ink)]">
+                  <span className="text-[0.625rem] font-bold uppercase tracking-[0.14em] text-warm-gray">
+                    Next up
+                  </span>
+                  <span className="text-sm text-ink">New dates are being planned.</span>
+                  <Link
+                    href="/contact"
+                    className="text-sm font-bold text-pink-dark underline underline-offset-4 decoration-2 hover:text-pink transition-colors duration-150"
+                  >
+                    Get told first →
+                  </Link>
+                </div>
+              )}
+            </motion.div>
           </div>
 
           {/* Polaroid collage */}
@@ -123,9 +145,11 @@ export function Hero() {
                 key={p.caption}
                 className={`absolute w-56 lg:w-64 bg-white border-2 border-ink shadow-[6px_6px_0_0_var(--color-ink)] p-3 pb-10 ${p.rotate}`}
                 style={{
-                  top: `${8 + i * 26}%`,
+                  top: `${2 + i * 22}%`,
                   left: `${i % 2 === 0 ? 4 + i * 8 : 42}%`,
-                  zIndex: i + 1,
+                  // Earlier cards sit on top, so each card's caption stays clear of the
+                  // one stacked below it. Ascending z-index buried every caption but the last.
+                  zIndex: polaroids.length - i,
                 }}
               >
                 <div className="relative aspect-square overflow-hidden">
@@ -149,25 +173,6 @@ export function Hero() {
             ))}
           </motion.div>
         </div>
-      </div>
-
-      {/* Marquee ticker */}
-      <div className="relative border-y-2 border-ink bg-pink text-white overflow-hidden py-3">
-        <div className="flex w-max animate-marquee" aria-hidden="true">
-          {[0, 1].map((copy) => (
-            <div key={copy} className="flex shrink-0">
-              {tickerItems.map((item) => (
-                <span key={`${copy}-${item}`} className="flex items-center font-heading font-bold uppercase tracking-wider text-sm md:text-base">
-                  <span className="px-6">{item}</span>
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor">
-                    <path d="M7 0 L8.5 5.5 L14 7 L8.5 8.5 L7 14 L5.5 8.5 L0 7 L5.5 5.5 Z" />
-                  </svg>
-                </span>
-              ))}
-            </div>
-          ))}
-        </div>
-        <span className="sr-only">{tickerItems.join(', ')}</span>
       </div>
     </section>
   )

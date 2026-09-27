@@ -4,12 +4,11 @@ import Image from 'next/image'
 import { ScrollReveal } from '@/components/shared/ScrollReveal'
 import { Button } from '@/components/ui/Button'
 import { Badge, AvailabilityBadge } from '@/components/ui/Badge'
-import { experiences, siteConfig } from '@/data/site'
-import { formatDate, formatPrice, isUpcomingEvent } from '@/lib/utils'
+import { siteConfig } from '@/data/site'
+import { formatDate, formatPrice } from '@/lib/utils'
+import type { Event } from '@/types'
 
-export function FeaturedExperience() {
-  const event = experiences.find((e) => isUpcomingEvent(e.date))
-
+export function FeaturedExperience({ event }: { event: Event | null }) {
   if (!event) {
     return (
       <section className="py-20 md:py-28 bg-paper">

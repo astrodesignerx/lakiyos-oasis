@@ -2,6 +2,11 @@
 
 const fromEmail = process.env.FROM_EMAIL || 'Lakiyo\'s Oasis <lakiyooasis@gmail.com>'
 
+// Email clients can't load the site's self-hosted webfonts, so each stack falls
+// back through fonts that ship with Windows/macOS/Android before generic sans.
+const bodyFont = `'DM Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif`
+const headingFont = `'Young Serif', Georgia, 'Times New Roman', Times, serif`
+
 // User-supplied values must not inject markup into email HTML
 function esc(value: string) {
   return value
@@ -28,8 +33,8 @@ export async function bookingConfirmationEmail(params: {
     to: [params.email],
     subject: `Booking Confirmed — ${esc(params.eventName)} | Lakiyo's Oasis`,
     html: `
-      <div style="font-family: 'DM Sans', sans-serif; max-width: 600px; margin: 0 auto; padding: 32px 24px;">
-        <h1 style="font-family: 'Bricolage Grotesque', sans-serif; color: #FF4D8D; font-size: 28px;">You're in!</h1>
+      <div style="font-family: ${bodyFont}; max-width: 600px; margin: 0 auto; padding: 32px 24px;">
+        <h1 style="font-family: ${headingFont}; color: #8B4FC4; font-size: 28px;">You're in!</h1>
         <p style="color: #2C2C2C; font-size: 16px; line-height: 1.6;">Hi ${esc(params.name)},</p>
         <p style="color: #2C2C2C; font-size: 16px; line-height: 1.6;">Your spot at <strong>${esc(params.eventName)}</strong> is confirmed. Here are the details:</p>
         <div style="background: #F5F0EB; border-radius: 12px; padding: 24px; margin: 24px 0;">
@@ -59,8 +64,8 @@ export async function orderConfirmationEmail(params: {
     to: [params.email],
     subject: `Order Confirmed — Lakiyo's Oasis`,
     html: `
-      <div style="font-family: 'DM Sans', sans-serif; max-width: 600px; margin: 0 auto; padding: 32px 24px;">
-        <h1 style="font-family: 'Bricolage Grotesque', sans-serif; color: #FF4D8D; font-size: 28px;">Order Confirmed!</h1>
+      <div style="font-family: ${bodyFont}; max-width: 600px; margin: 0 auto; padding: 32px 24px;">
+        <h1 style="font-family: ${headingFont}; color: #8B4FC4; font-size: 28px;">Order Confirmed!</h1>
         <p style="color: #2C2C2C; font-size: 16px;">Thank you for your order, ${esc(params.name)}.</p>
         <div style="background: #F5F0EB; border-radius: 12px; padding: 24px; margin: 24px 0;">
           <p style="margin: 0 0 8px;"><strong>Items:</strong></p>
